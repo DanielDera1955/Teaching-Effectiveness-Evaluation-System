@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Teaching Effectiveness Evaluation · Caritas University Enugu</title>
+<meta name="description" content="Anonymous student evaluation of teaching effectiveness." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board:#0F211B;
+    --panel:#163027;
+    --panel-2:#1B392E;
+    --line:#27453A;
+    --line-soft:#1F3A30;
+    --chalk:#ECF2EC;
+    --chalk-dim:#8CA79A;
+    --chalk-faint:#5E7A6D;
+    --stamp:#E9B44C;
+    --seal:#6FBF9A;
+    --alert:#E8825F;
+    --r-sm:6px; --r-md:12px; --r-lg:18px;
+    --display:'Bricolage Grotesque','Trebuchet MS',sans-serif;
+    --body:'Archivo',system-ui,-apple-system,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,'Courier New',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--body);background:var(--board);color:var(--chalk);
+    -webkit-font-smoothing:antialiased;line-height:1.5;position:relative;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .screen{display:none;position:relative;z-index:1}
+  .screen.on{display:block}
+  :focus-visible{outline:2px solid var(--stamp);outline-offset:2px;border-radius:3px}
+  a{color:inherit}
+
+  /* ============ LOGIN ============ */
+  .stage{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr}
+  .proof{
+    padding:48px 56px;display:flex;flex-direction:column;justify-content:space-between;gap:48px;
+    border-right:1px solid var(--line);
+    background:
+      radial-gradient(120% 90% at 8% 0%,rgba(111,191,154,.10),transparent 60%),
+      radial-gradient(90% 80% at 100% 100%,rgba(233,180,76,.07),transparent 55%);
+  }
+  .mark{display:flex;align-items:center;gap:12px}
+  .mark-glyph{
+    width:34px;height:34px;flex:none;border:1.5px solid var(--seal);border-radius:50%;
+    display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:14px;
+    color:var(--seal);letter-spacing:-.02em;
+  }
+  .mark-name{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
+  .mark-sub{font-size:11px;color:var(--chalk-faint);letter-spacing:.09em;text-transform:uppercase}
+  .thesis h1{
+    font-family:var(--display);font-weight:600;font-size:clamp(30px,3.4vw,46px);
+    line-height:1.05;letter-spacing:-.025em;max-width:15ch;margin-bottom:18px;
+  }
+  .thesis h1 em{font-style:normal;color:var(--seal)}
+  .thesis p{color:var(--chalk-dim);font-size:15px;max-width:42ch}
+  .chain{display:flex;align-items:stretch;max-width:520px;margin-top:34px}
+  .node{flex:1;border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;background:rgba(22,48,39,.55);min-width:0}
+  .node-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-faint);margin-bottom:10px}
+  .node-value{font-family:var(--mono);font-size:15px;color:var(--chalk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .node-value.pending{color:var(--chalk-faint)}
+  .node-note{font-size:11.5px;color:var(--chalk-faint);margin-top:9px;line-height:1.35}
+  .node--token .node-value{color:var(--stamp)}
+  .sever{width:74px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+  .sever-rule{flex:1;width:1px;background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 9px)}
+  .sever-tag{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--alert);text-align:center;line-height:1.3;padding:0 4px}
+  .proof-foot{font-size:12px;color:var(--chalk-faint);border-top:1px solid var(--line);padding-top:18px;max-width:46ch}
+  .gate{padding:48px 56px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+  .gate-inner{width:100%;max-width:400px}
+  .window{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;color:var(--chalk-dim);border:1px solid var(--line);border-radius:100px;padding:5px 12px 5px 9px;margin-bottom:26px}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--seal);flex:none;box-shadow:0 0 0 3px rgba(111,191,154,.16)}
+  .gate h2{font-family:var(--display);font-weight:600;font-size:27px;letter-spacing:-.02em;margin-bottom:6px}
+  .gate-sub{color:var(--chalk-dim);font-size:14px;margin-bottom:26px}
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:24px}
+  .role{appearance:none;border:0;cursor:pointer;background:transparent;color:var(--chalk-dim);font-family:var(--body);font-size:13px;font-weight:500;padding:9px 4px;border-radius:var(--r-sm);transition:background .18s,color .18s}
+  .role:hover{color:var(--chalk)}
+  .role[aria-selected="true"]{background:var(--panel);color:var(--chalk);box-shadow:inset 0 0 0 1px var(--line)}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12px;font-weight:500;color:var(--chalk-dim);margin-bottom:7px}
+  .input-wrap{position:relative;display:flex;align-items:center}
+  .field input{
+    width:100%;background:rgba(22,48,39,.5);border:1px solid var(--line);border-radius:var(--r-sm);
+    color:var(--chalk);font-family:var(--body);font-size:15px;padding:12px 14px;transition:border-color .16s,box-shadow .16s;
+  }
+  .field input.code{font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+  .field input::placeholder{color:var(--chalk-faint);letter-spacing:normal}
+  .field input:focus{outline:none;border-color:var(--seal);box-shadow:0 0 0 3px rgba(111,191,154,.15)}
+  .peek{position:absolute;right:6px;background:transparent;border:0;cursor:pointer;color:var(--chalk-faint);font-family:var(--body);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;padding:8px 9px;border-radius:var(--r-sm)}
+  .peek:hover{color:var(--chalk)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 22px;font-size:13px}
+  .check{display:flex;align-items:center;gap:8px;color:var(--chalk-dim);cursor:pointer}
+  .check input{appearance:none;width:15px;height:15px;flex:none;border:1px solid var(--line);border-radius:4px;background:rgba(22,48,39,.5);cursor:pointer;display:grid;place-items:center}
+  .check input:checked{background:var(--seal);border-color:var(--seal)}
+  .check input:checked::after{content:"";width:8px;height:4px;border-left:1.8px solid var(--board);border-bottom:1.8px solid var(--board);transform:rotate(-45deg) translate(1px,-1px)}
+  .link{color:var(--chalk-dim);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
+  .link:hover{color:var(--seal);border-color:var(--seal)}
+  .submit{width:100%;appearance:none;border:0;cursor:pointer;background:var(--seal);color:#0B1A15;font-family:var(--body);font-size:15px;font-weight:600;padding:13px;border-radius:var(--r-sm);transition:transform .12s,filter .16s}
+  .submit:hover{filter:brightness(1.07)}
+  .submit:active{transform:translateY(1px)}
+  .notice{display:none;margin-top:16px;font-size:13px;padding:11px 13px;border-radius:var(--r-sm);border:1px solid;line-height:1.45}
+  .notice[data-kind="error"]{display:block;color:var(--alert);border-color:rgba(232,130,95,.35);background:rgba(232,130,95,.08)}
+  .notice[data-kind="ok"]{display:block;color:var(--seal);border-color:rgba(111,191,154,.35);background:rgba(111,191,154,.08)}
+  .gate-foot{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--chalk-faint)}
+  .gate-foot a{color:var(--chalk-dim);text-decoration:none;border-bottom:1px solid var(--line)}
+  .mobile-proof{display:none}
+  .mark--mobile{display:none}
+
+  /* ============ APP SHELL ============ */
+  .shell{min-height:100vh;display:grid;grid-template-columns:246px 1fr}
+  .side{
+    border-right:1px solid var(--line);padding:26px 20px;display:flex;flex-direction:column;gap:26px;
+    background:linear-gradient(180deg,rgba(111,191,154,.05),transparent 40%);
+  }
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nav-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-faint);margin:0 0 10px 10px}
+  .nav a{
+    display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-sm);
+    color:var(--chalk-dim);text-decoration:none;font-size:13.5px;transition:background .16s,color .16s;cursor:pointer;
+  }
+  .nav a:hover{color:var(--chalk);background:rgba(27,57,46,.5)}
+  .nav a.active{background:var(--panel);color:var(--chalk);box-shadow:inset 0 0 0 1px var(--line)}
+  .nav .n-ico{width:16px;flex:none;text-align:center;font-size:13px;opacity:.85}
+  .side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:16px}
+  .who{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .who-av{width:32px;height:32px;flex:none;border-radius:50%;background:var(--panel-2);border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--seal)}
+  .who-name{font-size:13px;font-weight:500;line-height:1.25}
+  .who-meta{font-size:11px;color:var(--chalk-faint);font-family:var(--mono)}
+  .signout{appearance:none;background:transparent;border:1px solid var(--line);color:var(--chalk-dim);font-family:var(--body);font-size:12.5px;padding:8px;border-radius:var(--r-sm);width:100%;cursor:pointer}
+  .signout:hover{border-color:var(--alert);color:var(--alert)}
+
+  .main{padding:34px 40px 60px;max-width:1080px}
+  .crumb{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk-faint);margin-bottom:10px}
+  .h1{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:-.025em;margin-bottom:7px}
+  .lede{color:var(--chalk-dim);font-size:14.5px;max-width:62ch;margin-bottom:28px}
+
+  .cards{display:grid;gap:14px}
+  .card{border:1px solid var(--line);border-radius:var(--r-md);background:rgba(22,48,39,.42);padding:20px 22px}
+  .card--flat{background:transparent}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:12px;margin-bottom:26px}
+  .stat{border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;background:rgba(22,48,39,.42)}
+  .stat-k{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk-faint);margin-bottom:9px}
+  .stat-v{font-family:var(--display);font-size:29px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .stat-v small{font-size:14px;color:var(--chalk-faint);font-weight:400;margin-left:2px}
+  .stat-n{font-size:11.5px;color:var(--chalk-faint);margin-top:7px}
+
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.05em;padding:3px 9px;border-radius:100px;border:1px solid;white-space:nowrap}
+  .badge--todo{color:var(--stamp);border-color:rgba(233,180,76,.4);background:rgba(233,180,76,.08)}
+  .badge--done{color:var(--seal);border-color:rgba(111,191,154,.4);background:rgba(111,191,154,.08)}
+  .badge--shut{color:var(--chalk-faint);border-color:var(--line)}
+  .badge--warn{color:var(--alert);border-color:rgba(232,130,95,.4);background:rgba(232,130,95,.08)}
+
+  /* course rows */
+  .crs{display:flex;align-items:center;gap:16px;border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;background:rgba(22,48,39,.42);margin-bottom:10px;transition:border-color .16s,background .16s}
+  .crs:hover{border-color:var(--line);background:rgba(27,57,46,.6)}
+  .crs-code{font-family:var(--mono);font-size:12.5px;color:var(--stamp);width:74px;flex:none}
+  .crs-body{flex:1;min-width:0}
+  .crs-title{font-size:14.5px;font-weight:500;margin-bottom:3px}
+  .crs-lect{font-size:12.5px;color:var(--chalk-dim)}
+  .crs-act{display:flex;align-items:center;gap:12px;flex:none}
+  .btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--chalk);font-family:var(--body);font-size:13px;padding:8px 14px;border-radius:var(--r-sm);cursor:pointer;transition:.16s}
+  .btn:hover{border-color:var(--seal);color:var(--seal)}
+  .btn--go{background:var(--seal);border-color:var(--seal);color:#0B1A15;font-weight:600}
+  .btn--go:hover{filter:brightness(1.07);color:#0B1A15}
+  .btn--sm{font-size:12px;padding:6px 11px}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+
+  /* progress */
+  .prog{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .prog-track{flex:1;height:4px;border-radius:100px;background:var(--line-soft);overflow:hidden}
+  .prog-fill{height:100%;background:var(--seal);border-radius:100px;transition:width .3s ease}
+  .prog-txt{font-family:var(--mono);font-size:11.5px;color:var(--chalk-faint);flex:none}
+
+  /* likert */
+  .qgroup{border:1px solid var(--line);border-radius:var(--r-md);padding:20px 22px;background:rgba(22,48,39,.42);margin-bottom:12px}
+  .q{font-size:14.5px;margin-bottom:14px;max-width:60ch}
+  .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .sc{appearance:none;border:1px solid var(--line);background:transparent;border-radius:var(--r-sm);padding:11px 4px 9px;cursor:pointer;color:var(--chalk-dim);font-family:var(--body);transition:.14s;text-align:center}
+  .sc:hover{border-color:var(--seal);color:var(--chalk)}
+  .sc b{display:block;font-family:var(--mono);font-size:14px;font-weight:500;margin-bottom:3px}
+  .sc span{display:block;font-size:9.5px;letter-spacing:.03em;line-height:1.25}
+  .sc[aria-pressed="true"]{background:var(--seal);border-color:var(--seal);color:#0B1A15}
+  .sc[aria-pressed="true"] span{opacity:.75}
+  textarea{
+    width:100%;min-height:110px;resize:vertical;background:rgba(22,48,39,.5);border:1px solid var(--line);
+    border-radius:var(--r-sm);color:var(--chalk);font-family:var(--body);font-size:14px;padding:12px 14px;line-height:1.55;
+  }
+  textarea:focus{outline:none;border-color:var(--seal);box-shadow:0 0 0 3px rgba(111,191,154,.15)}
+  .steps-nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+
+  /* receipt */
+  .receipt{max-width:460px;margin:0 auto;text-align:center;padding:42px 0}
+  .seal-big{
+    width:74px;height:74px;margin:0 auto 24px;border:2px solid var(--seal);border-radius:50%;
+    display:grid;place-items:center;font-size:30px;color:var(--seal);
+  }
+  .tok{
+    font-family:var(--mono);font-size:19px;color:var(--stamp);letter-spacing:.08em;
+    border:1px dashed var(--line);border-radius:var(--r-md);padding:16px;margin:22px 0 16px;
+  }
+
+  /* dimension bars */
+  .dim{margin-bottom:16px}
+  .dim-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;font-size:13.5px;gap:12px}
+  .dim-val{font-family:var(--mono);font-size:13px;color:var(--chalk)}
+  .dim-track{height:7px;border-radius:100px;background:var(--line-soft);overflow:hidden}
+  .dim-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--seal),#8FD3B4)}
+  .dim-fill.low{background:linear-gradient(90deg,var(--alert),#F0A78B)}
+  .dim-fill.mid{background:linear-gradient(90deg,var(--stamp),#F2CC85)}
+
+  /* histogram */
+  .hist{display:flex;align-items:flex-end;gap:8px;height:118px;margin:6px 0 10px}
+  .hb{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px;height:100%}
+  .hb-bar{width:100%;background:var(--panel-2);border:1px solid var(--line);border-bottom:0;border-radius:5px 5px 0 0;min-height:3px}
+  .hb-bar.peak{background:rgba(111,191,154,.32);border-color:var(--seal)}
+  .hb-n{font-family:var(--mono);font-size:11px;color:var(--chalk-faint)}
+
+  /* table */
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th{
+    text-align:left;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--chalk-faint);
+    font-weight:500;padding:0 14px 11px;border-bottom:1px solid var(--line);
+  }
+  .tbl td{padding:13px 14px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl .num{font-family:var(--mono);font-size:13px}
+  .tbl-wrap{overflow-x:auto}
+
+  .quote{border-left:2px solid var(--line);padding:2px 0 2px 15px;margin-bottom:16px;font-size:13.5px;color:var(--chalk-dim);line-height:1.6}
+  .quote em{display:block;font-style:normal;font-size:11px;color:var(--chalk-faint);font-family:var(--mono);margin-top:7px}
+
+  .locked{text-align:center;padding:34px 20px;color:var(--chalk-faint);font-size:13.5px;line-height:1.6}
+  .locked b{display:block;color:var(--chalk-dim);font-size:15px;font-weight:500;margin-bottom:7px}
+
+  .split{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;align-items:start}
+  .h2{font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:-.015em;margin-bottom:4px}
+  .h2-sub{font-size:12.5px;color:var(--chalk-faint);margin-bottom:18px}
+  .seg{display:inline-flex;gap:3px;padding:3px;border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:20px}
+  .seg button{appearance:none;border:0;background:transparent;color:var(--chalk-dim);font-family:var(--body);font-size:12.5px;padding:7px 14px;border-radius:var(--r-sm);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--panel);color:var(--chalk);box-shadow:inset 0 0 0 1px var(--line)}
+
+  .topbar{display:none}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:960px){
+    .stage{grid-template-columns:1fr}
+    .proof{display:none}
+    .gate{padding:32px 22px 44px;justify-content:flex-start;min-height:100vh}
+    .gate-inner{max-width:440px}
+    .mark--mobile{display:flex;margin-bottom:26px}
+    .mobile-proof{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;margin-top:26px;background:rgba(22,48,39,.5)}
+    .mobile-proof .mp-icon{width:28px;height:28px;flex:none;border:1.5px solid var(--seal);border-radius:50%;display:grid;place-items:center;color:var(--seal);font-weight:700;font-size:12px}
+    .mobile-proof p{font-size:12.5px;color:var(--chalk-dim);line-height:1.4}
+    .mobile-proof strong{color:var(--chalk);font-weight:600}
+
+    .shell{grid-template-columns:1fr}
+    .side{display:none}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;
+      background:rgba(15,33,27,.94);backdrop-filter:blur(8px);
+    }
+    .tabs{display:flex;gap:4px;overflow-x:auto;padding:10px 18px 0;border-bottom:1px solid var(--line)}
+    .tabs a{white-space:nowrap;font-size:13px;color:var(--chalk-dim);text-decoration:none;padding:8px 12px 11px;border-bottom:2px solid transparent;cursor:pointer}
+    .tabs a.active{color:var(--chalk);border-bottom-color:var(--seal)}
+    .main{padding:24px 18px 60px}
+    .h1{font-size:24px}
+    .split{grid-template-columns:1fr}
+    .crs{flex-wrap:wrap;gap:10px}
+    .crs-code{width:auto}
+    .crs-act{width:100%;justify-content:space-between}
+    .scale{grid-template-columns:repeat(5,1fr);gap:4px}
+    .sc span{display:none}
+    .sc{padding:13px 2px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ==================== 1. LOGIN ==================== -->
+<div class="screen on" id="s-login">
+  <div class="stage">
+    <aside class="proof">
+      <div class="mark">
+        <div class="mark-glyph">TE</div>
+        <div>
+          <div class="mark-name">Teaching Effectiveness Evaluation</div>
+          <div class="mark-sub">Caritas University Enugu</div>
+        </div>
+      </div>
+      <div class="thesis">
+        <h1>Your name gets you in. It <em>does not</em> go on the form.</h1>
+        <p>We check your matric number against the course register so each student rates each lecturer once. The register is then left behind. Ratings travel under a ballot token that points back to nothing.</p>
+        <div class="chain">
+          <div class="node">
+            <div class="node-label">Identity</div>
+            <div class="node-value pending" id="idEcho">Not yet entered</div>
+            <div class="node-note">Checked against the course register, then dropped.</div>
+          </div>
+          <div class="sever" aria-hidden="true">
+            <div class="sever-rule"></div>
+            <div class="sever-tag">Link<br>not stored</div>
+            <div class="sever-rule"></div>
+          </div>
+          <div class="node node--token">
+            <div class="node-label">Ballot token</div>
+            <div class="node-value" id="tokenEcho">—</div>
+            <div class="node-note">Carries your ratings. Single use, one per course.</div>
+          </div>
+        </div>
+      </div>
+      <p class="proof-foot">Lecturers see only pooled results, and only after semester results are released. Any course with fewer than 10 responses is reported as insufficient data.</p>
+    </aside>
+
+    <main class="gate">
+      <div class="gate-inner">
+        <div class="mark mark--mobile">
+          <div class="mark-glyph">TE</div>
+          <div>
+            <div class="mark-name">Teaching Effectiveness Evaluation</div>
+            <div class="mark-sub">Caritas University Enugu</div>
+          </div>
+        </div>
+
+        <div class="window"><span class="dot"></span>2025/2026 · Second semester · Open until 14 Aug</div>
+        <h2 id="gateTitle">Sign in to evaluate</h2>
+        <p class="gate-sub" id="gateSub">Use the matric number and portal password you already have.</p>
+
+        <div class="roles" role="tablist" aria-label="Account type">
+          <button class="role" role="tab" aria-selected="true"  data-role="student">Student</button>
+          <button class="role" role="tab" aria-selected="false" data-role="lecturer">Lecturer</button>
+          <button class="role" role="tab" aria-selected="false" data-role="admin">Administrator</button>
+        </div>
+
+        <form id="signin" novalidate>
+          <div class="field">
+            <label for="userid" id="useridLabel">Matric number</label>
+            <div class="input-wrap">
+              <input id="userid" name="userid" class="code" type="text" autocomplete="username" placeholder="CSC/2021/0417" spellcheck="false" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+              <button type="button" class="peek" id="peek" aria-label="Show password">Show</button>
+            </div>
+          </div>
+          <div class="row">
+            <label class="check"><input type="checkbox" id="remember" />Keep me signed in</label>
+            <a class="link" href="#">Forgot password</a>
+          </div>
+          <button class="submit" type="button" id="submit">Sign in</button>
+          <div class="notice" id="notice" role="status" aria-live="polite"></div>
+        </form>
+
+        <div class="mobile-proof">
+          <div class="mp-icon">✓</div>
+          <p><strong>Ratings are anonymous.</strong> Your matric number confirms you took the course, then it is separated from your answers.</p>
+        </div>
+
+        <p class="gate-foot">Trouble signing in? Contact your department officer or <a href="#">academic quality support</a>.</p>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ==================== 2. APP SHELL ==================== -->
+<div class="screen" id="s-app">
+  <div class="shell">
+
+    <aside class="side">
+      <div class="mark">
+        <div class="mark-glyph">TE</div>
+        <div>
+          <div class="mark-name">Evaluation</div>
+          <div class="mark-sub">Caritas Enugu</div>
+        </div>
+      </div>
+      <nav class="nav" id="nav"><div class="nav-label" id="navLabel">Menu</div></nav>
+      <div class="side-foot">
+        <div class="who">
+          <div class="who-av" id="avatar">CO</div>
+          <div>
+            <div class="who-name" id="whoName">Chidera Okonkwo</div>
+            <div class="who-meta" id="whoMeta">CSC/2021/0417</div>
+          </div>
+        </div>
+        <button class="signout" id="signout">Sign out</button>
+      </div>
+    </aside>
+
+    <div>
+      <div class="topbar">
+        <div class="mark">
+          <div class="mark-glyph">TE</div>
+          <div><div class="mark-name" id="mName">Evaluation</div></div>
+        </div>
+        <button class="btn btn--sm" id="signout2">Sign out</button>
+      </div>
+      <div class="tabs" id="tabs"></div>
+      <main class="main" id="main"></main>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DEMO DATA — replace with API calls to your backend.
+   ============================================================ */
+const DIMENSIONS = [
+  { id:'clarity',  name:'Clarity of delivery',        items:[
+      'The lecturer explains concepts in a way I can follow.',
+      'Difficult topics are broken down with useful examples.'] },
+  { id:'organise', name:'Course organisation',        items:[
+      'Lectures follow the course outline in a logical order.',
+      'Materials are shared early enough to prepare.'] },
+  { id:'fairness', name:'Assessment fairness',        items:[
+      'Tests and assignments reflect what was actually taught.',
+      'Marking criteria are explained before assessment.'] },
+  { id:'support',  name:'Availability and responsiveness', items:[
+      'The lecturer is reachable during stated consultation hours.',
+      'Questions asked in class are answered properly.'] },
+  { id:'mastery',  name:'Subject mastery',            items:[
+      'The lecturer shows command of the subject.',
+      'Course content is linked to current practice in the field.'] }
+];
+const SCALE = ['Strongly disagree','Disagree','Neutral','Agree','Strongly agree'];
+
+const COURSES = [
+  { code:'CSC 401', title:'Software Engineering II', lecturer:'Dr. A. Nwosu',    unit:3, done:false },
+  { code:'CSC 403', title:'Computer Networks',       lecturer:'Prof. E. Okafor', unit:3, done:true  },
+  { code:'CSC 405', title:'Artificial Intelligence', lecturer:'Dr. C. Eze',      unit:3, done:false },
+  { code:'CSC 407', title:'Compiler Construction',   lecturer:'Mr. I. Adeyemi',  unit:2, done:false },
+  { code:'CSC 409', title:'Project Management',      lecturer:'Dr. M. Ibrahim',  unit:2, done:true  },
+  { code:'GST 401', title:'Entrepreneurship Studies',lecturer:'Mrs. F. Uche',    unit:2, done:false }
+];
+
+const LECTURER_COURSES = [
+  { code:'CSC 403', title:'Computer Networks', enrolled:118, responses:87,
+    scores:{clarity:4.3,organise:4.0,fairness:3.6,support:3.4,mastery:4.6},
+    dist:[2,5,14,38,28],
+    comments:[
+      'Explains routing very well, but the CA questions covered material we rushed through in one class.',
+      'Consultation hours are listed but he is often not in the office. Otherwise a strong lecturer.',
+      'Best lecturer this semester. Slides are shared ahead of every class.'] },
+  { code:'CSC 411', title:'Network Security', enrolled:34, responses:6,
+    scores:null, dist:null, comments:[] }
+];
+
+const ADMIN_ROWS = [
+  { name:'Prof. E. Okafor', dept:'Computer Science', courses:2, resp:87,  rate:74, raw:4.18, adj:4.02, flag:null },
+  { name:'Dr. A. Nwosu',    dept:'Computer Science', courses:1, resp:64,  rate:61, raw:3.91, adj:3.88, flag:null },
+  { name:'Dr. C. Eze',      dept:'Computer Science', courses:2, resp:71,  rate:68, raw:4.44, adj:4.09, flag:'Leniency adjusted' },
+  { name:'Mr. I. Adeyemi',  dept:'Computer Science', courses:1, resp:52,  rate:57, raw:3.22, adj:3.31, flag:null },
+  { name:'Dr. M. Ibrahim',  dept:'Computer Science', courses:1, resp:9,   rate:18, raw:null, adj:null, flag:'Insufficient data' },
+  { name:'Mrs. F. Uche',    dept:'General Studies',  courses:3, resp:141, rate:66, raw:3.74, adj:3.70, flag:null }
+];
+
+const MENUS = {
+  student:  [['courses','▦','My courses'],['history','◷','Submission history'],['help','?','How this works']],
+  lecturer: [['results','▤','My results'],['comments','❝','Student comments'],['help','?','How scores are computed']],
+  admin:    [['overview','◈','Overview'],['staff','▤','Staff results'],['window','◷','Evaluation window'],['manage','⚙','Courses & staff']]
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let ROLE = 'student';
+let VIEW = 'courses';
+let TOKEN = '';
+let activeCourse = null;
+let step = 0;
+let answers = {};
+
+const $ = id => document.getElementById(id);
+const main = $('main');
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+(function login(){
+  const idInput=$('userid'), idLabel=$('useridLabel'), pwInput=$('password'),
+        peek=$('peek'), form=$('signin'), submit=$('submit'), notice=$('notice'),
+        idEcho=$('idEcho'), tokenEcho=$('tokenEcho'), title=$('gateTitle'), sub=$('gateSub');
+  const roles=[...document.querySelectorAll('.role')];
+  let role='student';
+
+  const COPY={
+    student:{title:'Sign in to evaluate',sub:'Use the matric number and portal password you already have.',label:'Matric number',ph:'CSC/2021/0417'},
+    lecturer:{title:'Sign in to your results',sub:'Pooled results open after semester results are released.',label:'Staff ID',ph:'STF-2214'},
+    admin:{title:'Sign in to administration',sub:'Manage evaluation windows, instruments and reporting.',label:'Staff ID',ph:'STF-0031'}
+  };
+
+  roles.forEach(b=>b.addEventListener('click',()=>{
+    role=b.dataset.role;
+    roles.forEach(x=>x.setAttribute('aria-selected',String(x===b)));
+    const c=COPY[role];
+    title.textContent=c.title; sub.textContent=c.sub;
+    idLabel.textContent=c.label; idInput.placeholder=c.ph; idInput.value='';
+    clear(); echo();
+  }));
+
+  peek.addEventListener('click',()=>{
+    const h=pwInput.type==='password';
+    pwInput.type=h?'text':'password';
+    peek.textContent=h?'Hide':'Show';
+    pwInput.focus();
+  });
+
+  // Display only. Real tokens must be issued server-side from a CSPRNG,
+  // into a table that is never joined back to the student table.
+  function preview(seed){
+    let a=0x811c9dc5,b=0x1000193;
+    for(let i=0;i<seed.length;i++){
+      a=(a^seed.charCodeAt(i))*16777619>>>0;
+      b=(b+seed.charCodeAt(i)*(i+7))>>>0;
+    }
+    const hex=n=>n.toString(16).toUpperCase().padStart(8,'0');
+    return 'BAL-'+hex(a).slice(0,4)+'-'+hex(b).slice(0,4);
+  }
+  function echo(){
+    const v=idInput.value.trim().toUpperCase();
+    if(role!=='student'){idEcho.textContent='Not applicable';idEcho.classList.add('pending');tokenEcho.textContent='—';return;}
+    if(v.length<4){idEcho.textContent='Not yet entered';idEcho.classList.add('pending');tokenEcho.textContent='—';return;}
+    idEcho.textContent=v; idEcho.classList.remove('pending'); tokenEcho.textContent=preview(v);
+  }
+  function say(k,m){notice.dataset.kind=k;notice.textContent=m;}
+  function clear(){notice.removeAttribute('data-kind');notice.textContent='';}
+
+  idInput.addEventListener('input',()=>{clear();echo();});
+  pwInput.addEventListener('input',clear);
+
+  function attempt(e){
+    if(e && e.preventDefault) e.preventDefault();
+    const id=idInput.value.trim(), pw=pwInput.value;
+    if(!id){say('error','Enter your '+COPY[role].label.toLowerCase()+' to continue.');idInput.focus();return;}
+    if(role==='student'&&!/^[A-Za-z]{2,4}[\/\-]\d{4}[\/\-]\d{3,4}$/.test(id)){
+      say('error','That matric number does not match the expected format, e.g. CSC/2021/0417.');idInput.focus();return;}
+    if(!pw){say('error','Enter your password to continue.');pwInput.focus();return;}
+
+    submit.textContent='Checking the register…'; submit.disabled=true;
+    setTimeout(()=>{
+      submit.textContent='Sign in'; submit.disabled=false;
+      TOKEN = role==='student' ? preview(id.toUpperCase()) : '';
+      enterApp(role, id.toUpperCase());
+    },800);
+  }
+
+  submit.addEventListener('click', attempt);
+  form.addEventListener('submit', attempt);
+  [idInput,pwInput].forEach(el=>el.addEventListener('keydown',ev=>{
+    if(ev.key==='Enter') attempt(ev);
+  }));
+
+  echo();
+})();
+
+/* ============================================================
+   APP
+   ============================================================ */
+function enterApp(role,id){
+  ROLE=role;
+  VIEW=MENUS[role][0][0];
+  const who = role==='student'
+      ? {n:'Chidera Okonkwo', m:id, a:'CO', label:'400 Level · Computer Science'}
+    : role==='lecturer'
+      ? {n:'Prof. E. Okafor', m:id, a:'EO', label:'Computer Science'}
+      : {n:'Academic Quality', m:id, a:'AQ', label:'Directorate'};
+  $('whoName').textContent=who.n; $('whoMeta').textContent=who.m; $('avatar').textContent=who.a;
+  $('navLabel').textContent = role==='student'?'This semester':role==='lecturer'?'2025/2026 · Second':'Administration';
+  buildNav();
+  $('s-login').classList.remove('on');
+  $('s-app').classList.add('on');
+  window.scrollTo(0,0);
+  render();
+}
+
+function buildNav(){
+  const nav=$('nav'), tabs=$('tabs');
+  nav.querySelectorAll('a').forEach(a=>a.remove());
+  tabs.innerHTML='';
+  MENUS[ROLE].forEach(([key,ico,label])=>{
+    const a=document.createElement('a');
+    a.innerHTML='<span class="n-ico">'+ico+'</span>'+label;
+    a.onclick=()=>{VIEW=key;activeCourse=null;render();};
+    nav.appendChild(a);
+    const t=document.createElement('a');
+    t.textContent=label; t.onclick=()=>{VIEW=key;activeCourse=null;render();};
+    tabs.appendChild(t);
+  });
+}
+
+function markNav(){
+  const keys=MENUS[ROLE].map(m=>m[0]);
+  const i=keys.indexOf(VIEW);
+  [...$('nav').querySelectorAll('a')].forEach((a,n)=>a.classList.toggle('active',n===i));
+  [...$('tabs').querySelectorAll('a')].forEach((a,n)=>a.classList.toggle('active',n===i));
+}
+
+$('signout').onclick=$('signout2').onclick=()=>{
+  $('s-app').classList.remove('on'); $('s-login').classList.add('on');
+  activeCourse=null; answers={}; step=0; window.scrollTo(0,0);
+};
+
+/* ---------- router ---------- */
+function render(){
+  markNav();
+  window.scrollTo(0,0);
+  if(ROLE==='student'){
+    if(activeCourse&&VIEW==='form')    return viewForm();
+    if(activeCourse&&VIEW==='receipt') return viewReceipt();
+    if(VIEW==='courses')  return viewCourses();
+    if(VIEW==='history')  return viewHistory();
+    if(VIEW==='help')     return viewHelpStudent();
+  }
+  if(ROLE==='lecturer'){
+    if(VIEW==='results')  return viewResults();
+    if(VIEW==='comments') return viewComments();
+    if(VIEW==='help')     return viewHelpLecturer();
+  }
+  if(ROLE==='admin'){
+    if(VIEW==='overview') return viewOverview();
+    if(VIEW==='staff')    return viewStaff();
+    if(VIEW==='window')   return viewWindow();
+    if(VIEW==='manage')   return viewManage();
+  }
+}
+
+function head(crumb,h1,lede){
+  return '<div class="crumb">'+crumb+'</div><h1 class="h1">'+h1+'</h1>'+
+         (lede?'<p class="lede">'+lede+'</p>':'');
+}
+
+/* ---------- STUDENT: courses ---------- */
+function viewCourses(){
+  const left=COURSES.filter(c=>!c.done).length;
+  main.innerHTML=
+    head('Student','My courses',
+      'You can rate each lecturer once per course, this semester only. Nothing you submit is linked back to your matric number.')+
+    '<div class="stats">'+
+      stat('Registered courses',COURSES.length,'Second semester')+
+      stat('Still to rate',left,left?'Closes 14 August':'All done')+
+      stat('Your ballot token','<span style="font-family:var(--mono);font-size:16px;color:var(--stamp)">'+TOKEN+'</span>','Issued at sign-in')+
+    '</div>'+
+    COURSES.map((c,i)=>
+      '<div class="crs">'+
+        '<div class="crs-code">'+c.code+'</div>'+
+        '<div class="crs-body"><div class="crs-title">'+c.title+'</div>'+
+          '<div class="crs-lect">'+c.lecturer+' · '+c.unit+' units</div></div>'+
+        '<div class="crs-act">'+
+          (c.done?'<span class="badge badge--done">✓ Rated</span><button class="btn btn--sm" disabled>Submitted</button>'
+                 :'<span class="badge badge--todo">Not rated</span><button class="btn btn--go btn--sm" onclick="startForm('+i+')">Rate now</button>')+
+        '</div></div>').join('');
+}
+
+function stat(k,v,n){
+  return '<div class="stat"><div class="stat-k">'+k+'</div><div class="stat-v">'+v+'</div>'+
+         (n?'<div class="stat-n">'+n+'</div>':'')+'</div>';
+}
+
+/* ---------- STUDENT: evaluation form ---------- */
+window.startForm=function(i){ activeCourse=COURSES[i]; step=0; answers={}; VIEW='form'; render(); };
+
+function viewForm(){
+  const total=DIMENSIONS.length+1;
+  const pct=Math.round((step/total)*100);
+  let body;
+
+  if(step<DIMENSIONS.length){
+    const d=DIMENSIONS[step];
+    body='<div class="h2">'+d.name+'</div><p class="h2-sub">Answer for '+activeCourse.lecturer+' in '+activeCourse.code+'.</p>'+
+      d.items.map((q,qi)=>{
+        const key=d.id+'-'+qi;
+        return '<div class="qgroup"><p class="q">'+q+'</p><div class="scale">'+
+          SCALE.map((lab,si)=>
+            '<button class="sc" aria-pressed="'+(answers[key]===si+1)+'" onclick="pick(\''+key+'\','+(si+1)+')">'+
+            '<b>'+(si+1)+'</b><span>'+lab+'</span></button>').join('')+
+          '</div></div>';
+      }).join('');
+  } else {
+    body='<div class="h2">Anything else?</div><p class="h2-sub">Optional. Comments are pooled and screened before your lecturer sees them.</p>'+
+      '<div class="qgroup"><textarea id="freeText" placeholder="What worked well, and what would you change?">'+(answers.text||'')+'</textarea></div>';
+  }
+
+  const answered = step<DIMENSIONS.length
+    ? DIMENSIONS[step].items.every((_,qi)=>answers[DIMENSIONS[step].id+'-'+qi])
+    : true;
+
+  main.innerHTML=
+    head(activeCourse.code+' · '+activeCourse.lecturer,'Rate this course','')+
+    '<div class="prog"><div class="prog-track"><div class="prog-fill" style="width:'+pct+'%"></div></div>'+
+    '<div class="prog-txt">'+(step+1)+' / '+total+'</div></div>'+
+    body+
+    '<div class="steps-nav">'+
+      '<button class="btn" onclick="back()">'+(step===0?'Cancel':'Back')+'</button>'+
+      '<button class="btn btn--go" onclick="next()" '+(answered?'':'disabled')+'>'+
+        (step===total-1?'Submit evaluation':'Continue')+'</button>'+
+    '</div>';
+}
+
+window.pick=function(key,val){ answers[key]=val; viewForm(); };
+window.back=function(){
+  if(step===0){ activeCourse=null; VIEW='courses'; render(); return; }
+  step--; viewForm();
+};
+window.next=function(){
+  if(step===DIMENSIONS.length){
+    const t=$('freeText'); if(t) answers.text=t.value;
+    activeCourse.done=true; VIEW='receipt'; render(); return;
+  }
+  step++; viewForm();
+};
+
+/* ---------- STUDENT: receipt ---------- */
+function viewReceipt(){
+  const left=COURSES.filter(c=>!c.done).length;
+  main.innerHTML='<div class="receipt">'+
+    '<div class="seal-big">✓</div>'+
+    '<h1 class="h1">Evaluation submitted</h1>'+
+    '<p class="lede" style="margin:0 auto 4px">Your ratings for '+activeCourse.code+' have been recorded under your ballot token. They cannot be traced back to you, and they cannot be edited.</p>'+
+    '<div class="tok">'+TOKEN+'</div>'+
+    '<p style="font-size:12.5px;color:var(--chalk-faint);margin-bottom:26px">This token is now used for '+activeCourse.code+'. It cannot submit again for this course.</p>'+
+    '<button class="btn btn--go" onclick="VIEW=\'courses\';activeCourse=null;render()">'+
+      (left?'Rate the next course ('+left+' left)':'Back to my courses')+'</button>'+
+    '</div>';
+}
+
+/* ---------- STUDENT: history / help ---------- */
+function viewHistory(){
+  const done=COURSES.filter(c=>c.done);
+  main.innerHTML=head('Student','Submission history',
+    'We record that a token was used, not what it said. Your answers are not shown here — not even to you.')+
+    (done.length?done.map(c=>
+      '<div class="crs"><div class="crs-code">'+c.code+'</div>'+
+      '<div class="crs-body"><div class="crs-title">'+c.title+'</div>'+
+      '<div class="crs-lect">'+c.lecturer+'</div></div>'+
+      '<div class="crs-act"><span class="badge badge--done">✓ Recorded</span></div></div>').join('')
+    : '<div class="card"><div class="locked"><b>Nothing submitted yet</b>Rate a course and it will be listed here.</div></div>');
+}
+
+function viewHelpStudent(){
+  main.innerHTML=head('Student','How this works','')+
+  '<div class="cards">'+
+    card('Your identity is checked, then dropped','When you sign in, the system confirms you are registered for the course. It then issues a single-use ballot token and stores your answers against that token. The table linking you to the token is never written.')+
+    card('One rating per course','Each token can be used once per course. This is enforced in the database, not in the browser, so it cannot be bypassed by refreshing or opening a second tab.')+
+    card('When your lecturer sees this','Never during the semester. Results open to lecturers only after examination results are released, and only as pooled figures across all respondents.')+
+    card('Small classes are protected','If fewer than 10 students respond for a course, no score is shown at all. With few responses, individual opinions become identifiable, so the result is withheld.')+
+  '</div>';
+}
+function card(h,p){ return '<div class="card"><div class="h2">'+h+'</div><p style="font-size:13.5px;color:var(--chalk-dim);max-width:70ch">'+p+'</p></div>'; }
+
+/* ---------- LECTURER: results ---------- */
+function viewResults(){
+  const c=LECTURER_COURSES[0];
+  const rate=Math.round(c.responses/c.enrolled*100);
+  const avg=(Object.values(c.scores).reduce((a,b)=>a+b,0)/5);
+  const peak=Math.max(...c.dist);
+
+  main.innerHTML=head('Lecturer · 2025/2026 second semester','My results',
+    'Pooled student feedback for courses you taught. Released 21 July, after examination results.')+
+    '<div class="stats">'+
+      stat('Adjusted score',avg.toFixed(2)+'<small>/5</small>','Corrected for rating style')+
+      stat('Raw mean',(avg+0.16).toFixed(2)+'<small>/5</small>','Before correction')+
+      stat('Responses',c.responses,'of '+c.enrolled+' enrolled')+
+      stat('Response rate',rate+'<small>%</small>',rate>=40?'Above reporting threshold':'Below threshold')+
+    '</div>'+
+    '<div class="split">'+
+      '<div class="card"><div class="h2">'+c.code+' · '+c.title+'</div>'+
+        '<p class="h2-sub">Score by dimension. Each is the mean of two items.</p>'+
+        DIMENSIONS.map(d=>{
+          const v=c.scores[d.id], pct=v/5*100;
+          const cls=v<3.5?'low':v<4?'mid':'';
+          return '<div class="dim"><div class="dim-top"><span>'+d.name+'</span>'+
+                 '<span class="dim-val">'+v.toFixed(1)+'</span></div>'+
+                 '<div class="dim-track"><div class="dim-fill '+cls+'" style="width:'+pct+'%"></div></div></div>';
+        }).join('')+
+      '</div>'+
+      '<div class="card"><div class="h2">Spread of responses</div>'+
+        '<p class="h2-sub">A mean hides disagreement. This does not.</p>'+
+        '<div class="hist">'+c.dist.map((n,i)=>
+          '<div class="hb"><div class="hb-n">'+n+'</div>'+
+          '<div class="hb-bar'+(n===peak?' peak':'')+'" style="height:'+(n/peak*100)+'%"></div>'+
+          '<div class="hb-n">'+(i+1)+'</div></div>').join('')+
+        '</div>'+
+        '<p style="font-size:12px;color:var(--chalk-faint);margin-top:12px;line-height:1.5">Median 4. Most students agree, but 7 rated at 2 or below — see the comments for why.</p>'+
+      '</div>'+
+    '</div>'+
+    '<div class="card" style="margin-top:14px"><div class="h2">'+LECTURER_COURSES[1].code+' · '+LECTURER_COURSES[1].title+'</div>'+
+      '<div class="locked"><b>Insufficient data</b>6 of 34 students responded, an 18% response rate. Below 10 responses individual students become identifiable, so no score is published for this course.</div>'+
+    '</div>';
+}
+
+function viewComments(){
+  const c=LECTURER_COURSES[0];
+  main.innerHTML=head('Lecturer','Student comments',
+    'Screened for abusive language and identifying details before release. Order is randomised, so comments cannot be matched to the rating rows above.')+
+    '<div class="card">'+
+      '<div class="h2">'+c.code+' · '+c.comments.length+' comments</div>'+
+      '<p class="h2-sub">From 87 respondents. Not every student left one.</p>'+
+      c.comments.map((q,i)=>'<div class="quote">'+q+'<em>Anonymous · comment '+(i+1)+'</em></div>').join('')+
+    '</div>'+
+    '<div class="card" style="margin-top:14px"><div class="locked">'+
+      '<b>2 comments withheld</b>Screened out for naming other students or containing abusive language. The directorate reviews these separately.</div></div>';
+}
+
+function viewHelpLecturer(){
+  main.innerHTML=head('Lecturer','How scores are computed','')+
+  '<div class="cards">'+
+    card('Ratings are normalised per student','Some students rate everything highly, others rate everything low. Each response is standardised against that student\'s own average across all their courses, so a generous rater and a harsh rater carry the same weight.')+
+    card('Dimensions are reported separately','A single overall number hides where the problem is. Scores are computed per dimension — clarity, organisation, fairness, availability, mastery — from two items each.')+
+    card('Small samples are suppressed','Courses with fewer than 10 responses or below a 40% response rate publish no score. A mean of four opinions is noise, and it also risks identifying the respondents.')+
+    card('Spread is published alongside the mean','The distribution is shown so a polarised class is not mistaken for an average one. Two very different classes can produce the same mean.')+
+  '</div>';
+}
+
+/* ---------- ADMIN ---------- */
+function viewOverview(){
+  main.innerHTML=head('Administration','Directorate overview',
+    '2025/2026 second semester. Window closes 14 August.')+
+    '<div class="stats">'+
+      stat('Response rate','64<small>%</small>','Target 60%')+
+      stat('Evaluations submitted','2,418','across 71 courses')+
+      stat('Courses suppressed','9','below reporting threshold')+
+      stat('Staff flagged','3','for directorate review')+
+    '</div>'+
+    '<div class="split">'+
+      '<div class="card"><div class="h2">Response rate by department</div>'+
+        '<p class="h2-sub">Departments below 40% cannot publish course-level results.</p>'+
+        [['Computer Science',71],['Mass Communication',66],['Accounting',58],['Microbiology',49],['Law',37]]
+          .map(([d,v])=>'<div class="dim"><div class="dim-top"><span>'+d+'</span><span class="dim-val">'+v+'%</span></div>'+
+            '<div class="dim-track"><div class="dim-fill '+(v<40?'low':v<60?'mid':'')+'" style="width:'+v+'%"></div></div></div>').join('')+
+      '</div>'+
+      '<div class="card"><div class="h2">Needs attention</div><p class="h2-sub">Ranked by urgency.</p>'+
+        '<div class="quote">Law faculty at 37% response rate — below the publishing threshold with 21 days left.<em>Send reminder</em></div>'+
+        '<div class="quote">Dr. C. Eze raw score 4.44, adjusted 4.09 — a large leniency gap worth reviewing.<em>Review</em></div>'+
+        '<div class="quote">9 courses suppressed for low response. Six are electives under 20 students.<em>Expected</em></div>'+
+      '</div>'+
+    '</div>';
+}
+
+function viewStaff(){
+  main.innerHTML=head('Administration','Staff results',
+    'Adjusted scores correct for student rating style and course difficulty. Raw means are shown for comparison only.')+
+    '<div class="card card--flat" style="padding:0"><div class="tbl-wrap"><table class="tbl">'+
+    '<thead><tr><th>Lecturer</th><th>Department</th><th>Courses</th><th>Responses</th><th>Rate</th><th>Raw</th><th>Adjusted</th><th>Status</th></tr></thead><tbody>'+
+    ADMIN_ROWS.map(r=>
+      '<tr><td>'+r.name+'</td><td style="color:var(--chalk-dim)">'+r.dept+'</td>'+
+      '<td class="num">'+r.courses+'</td><td class="num">'+r.resp+'</td>'+
+      '<td class="num" style="color:'+(r.rate<40?'var(--alert)':'var(--chalk)')+'">'+r.rate+'%</td>'+
+      '<td class="num" style="color:var(--chalk-faint)">'+(r.raw?r.raw.toFixed(2):'—')+'</td>'+
+      '<td class="num" style="color:'+(r.adj?'var(--seal)':'var(--chalk-faint)')+'">'+(r.adj?r.adj.toFixed(2):'—')+'</td>'+
+      '<td>'+(r.flag?'<span class="badge '+(r.flag==='Insufficient data'?'badge--shut':'badge--warn')+'">'+r.flag+'</span>':'<span class="badge badge--done">Published</span>')+'</td></tr>').join('')+
+    '</tbody></table></div></div>'+
+    '<div style="display:flex;gap:10px;margin-top:16px"><button class="btn">Export CSV</button><button class="btn">Generate PDF report</button></div>';
+}
+
+function viewWindow(){
+  main.innerHTML=head('Administration','Evaluation window',
+    'Controls when students can submit and when lecturers can see results.')+
+    '<div class="split">'+
+      '<div class="card"><div class="h2">Current window</div><p class="h2-sub">2025/2026 second semester</p>'+
+        rowKV('Opens','30 June 2026')+rowKV('Closes','14 August 2026')+
+        rowKV('Results released to staff','After examination results')+
+        rowKV('Status','<span class="badge badge--done">Open · 21 days left</span>')+
+        '<div style="display:flex;gap:10px;margin-top:20px"><button class="btn">Edit dates</button><button class="btn">Close early</button></div>'+
+      '</div>'+
+      '<div class="card"><div class="h2">Reporting rules</div><p class="h2-sub">Applied before any result is published.</p>'+
+        rowKV('Minimum responses','10')+rowKV('Minimum response rate','40%')+
+        rowKV('Per-student normalisation','On')+rowKV('Comment screening','On')+
+        '<div style="margin-top:20px"><button class="btn">Edit thresholds</button></div>'+
+      '</div>'+
+    '</div>';
+}
+function rowKV(k,v){
+  return '<div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px">'+
+    '<span style="color:var(--chalk-dim)">'+k+'</span><span>'+v+'</span></div>';
+}
+
+function viewManage(){
+  main.innerHTML=head('Administration','Courses and staff',
+    'Course-to-lecturer assignments drive who students are asked to rate. Enrolment is imported from the registry each semester.')+
+    '<div class="stats">'+stat('Lecturers',146,'active this session')+stat('Courses',412,'71 under evaluation')+
+      stat('Enrolments','11,904','imported 28 June')+'</div>'+
+    '<div class="card card--flat" style="padding:0"><div class="tbl-wrap"><table class="tbl">'+
+    '<thead><tr><th>Code</th><th>Course</th><th>Lecturer</th><th>Enrolled</th><th></th></tr></thead><tbody>'+
+    COURSES.map(c=>'<tr><td class="num" style="color:var(--stamp)">'+c.code+'</td><td>'+c.title+'</td>'+
+      '<td style="color:var(--chalk-dim)">'+c.lecturer+'</td><td class="num">'+(60+c.code.length*7)+'</td>'+
+      '<td style="text-align:right"><button class="btn btn--sm">Edit</button></td></tr>').join('')+
+    '</tbody></table></div></div>'+
+    '<div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn--go">Add course</button>'+
+    '<button class="btn">Add lecturer</button><button class="btn">Re-import enrolments</button></div>';
+}
+</script>
+</body>
+</html>
